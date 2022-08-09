@@ -1,6 +1,4 @@
 import 'package:app/src/shared/classes/classes.dart';
-
-import 'providers.dart';
 import '../classes/classes.dart';
 
 class ImagesProvider {

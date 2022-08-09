@@ -1,5 +1,3 @@
-import 'classes.dart';
-
 class MenuImage {
   const MenuImage(
       {required this.image,
