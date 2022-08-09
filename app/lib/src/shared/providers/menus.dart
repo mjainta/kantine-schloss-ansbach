@@ -19,4 +19,19 @@ final _menus = <Menu>[
     calendarWeek: 33,
     image: images[1],
   ),
+  Menu(
+    title: 'Speiseplan',
+    calendarWeek: 34,
+    image: images[0],
+  ),
+  Menu(
+    title: 'Speiseplan',
+    calendarWeek: 35,
+    image: images[1],
+  ),
+  Menu(
+    title: 'Speiseplan',
+    calendarWeek: 36,
+    image: images[0],
+  ),
 ];
