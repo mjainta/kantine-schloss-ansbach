@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 import '../../../shared/classes/classes.dart';
 import '../../../shared/providers/providers.dart';
 
@@ -45,22 +46,24 @@ class _HomeScreenState extends State<HomeScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return DefaultTabController(
-            length: _menus.length,
-            child: Scaffold(
-              appBar: AppBar(
-                // Here we take the value from the HomeScreen object that was created by
-                // the App.build method, and use it to set our appbar title.
-                title: Text(widget.title),
-                bottom: TabBar(
-                  tabs: buildImageTabs(_menus),
-                ),
+          length: _menus.length,
+          child: Scaffold(
+            appBar: AppBar(
+              // Here we take the value from the HomeScreen object that was created by
+              // the App.build method, and use it to set our appbar title.
+              title: Text(widget.title),
+              bottom: TabBar(
+                tabs: buildImageTabs(_menus),
               ),
-              body: LayoutBuilder(
-                builder: (context, constraints) => TabBarView(
-                  children: buildImageViews(_menus),
-                ),
+            ),
+            body: LayoutBuilder(
+              builder: (context, constraints) => TabBarView(
+                physics: NeverScrollableScrollPhysics(),
+                children: buildImageViews(_menus),
               ),
-            ));
+            ),
+          ),
+        );
       },
     );
   }
@@ -83,11 +86,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
     for (var menu in menus) {
       views.add(
-        SingleChildScrollView(
-          child: Image.network(
-            menu.image.sourceLink,
-            fit: BoxFit.fitWidth,
-          ),
+        // InteractiveViewer(
+        //   maxScale: 6,
+        //   child: Image.asset(
+        //     menu.image.sourceLink,
+        //     fit: BoxFit.fitWidth,
+        //   ),
+        // ),
+        OrientationBuilder(
+          builder: (context, orientation) {
+            var initialScale = orientation == Orientation.portrait
+                ? PhotoViewComputedScale.contained
+                : PhotoViewComputedScale.covered;
+            var basePosition = orientation == Orientation.portrait
+                ? Alignment.center
+                : Alignment.topCenter;
+            return PhotoView(
+              backgroundDecoration: BoxDecoration(color: Colors.white),
+              imageProvider: AssetImage(menu.image.sourceLink),
+              basePosition: basePosition,
+              initialScale: initialScale,
+              minScale: PhotoViewComputedScale.contained,
+              maxScale: PhotoViewComputedScale.covered * 2,
+            );
+          },
         ),
       );
     }
