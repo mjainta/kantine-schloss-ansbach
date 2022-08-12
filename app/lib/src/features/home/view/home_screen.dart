@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import '../../../shared/classes/classes.dart';
 import '../../../shared/providers/providers.dart';
+import 'view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -22,16 +23,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Menu> _menus = MenuProvider().menus;
-  int _menuCursor = 0;
+  final _menus = MenuProvider().menus;
   Menu? _menu;
-
-  void _switchImage() {
-    setState(() {
-      _menuCursor = _menuCursor == 0 ? 1 : 0;
-      _menu = _menus[_menuCursor];
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
               // Here we take the value from the HomeScreen object that was created by
               // the App.build method, and use it to set our appbar title.
               title: Text(widget.title),
+              actions: const [BrightnessToggle()],
               bottom: TabBar(
                 tabs: buildImageTabs(_menus),
               ),
             ),
             body: LayoutBuilder(
               builder: (context, constraints) => TabBarView(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: buildImageViews(_menus),
               ),
             ),
@@ -72,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     List<Tab> tabs = [];
 
     for (var menu in menus) {
-      String text = 'KW ' + menu.calendarWeek.toString();
+      String text = 'KW ${menu.calendarWeek}';
       tabs.add(
         Tab(text: text),
       );

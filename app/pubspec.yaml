@@ -37,6 +37,9 @@ dependencies:
   go_router: ^4.2.7
   scroll_snap_list: ^0.9.1
   photo_view: ^0.14.0
+  google_fonts: ^3.0.1
+  dynamic_color: ^1.4.0
+  material_color_utilities: ^0.1.4
 
 dev_dependencies:
   flutter_test:
