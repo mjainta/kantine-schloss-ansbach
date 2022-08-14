@@ -30,25 +30,68 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ValueListenableBuilder<List<Menu>>(
             valueListenable: menus,
             builder: (context, value, child) {
-              return DefaultTabController(
-                length: value.length,
-                child: Scaffold(
+              if (value.isEmpty) {
+                Future<List<Menu>> future = MenuProvider.shared.refresh();
+                future.then(
+                    (menus) => MenusChange(menus: menus).dispatch(context));
+                // Display message when no menu is there, yet
+                return Scaffold(
                   appBar: AppBar(
                     title: Text(widget.title),
                     leading: const RefreshMenusButton(),
                     actions: const [BrightnessToggle()],
-                    bottom: TabBar(
-                      tabs: buildImageTabs(value),
-                    ),
                   ),
                   body: LayoutBuilder(
-                    builder: (context, constraints) => TabBarView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: buildImageViews(value),
+                    builder: (context, constraints) => Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(64),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              'Keine Speisepläne vorhanden.',
+                              textScaleFactor: 1.3,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              'Prüfe nach neuen Speiseplänen...',
+                              textScaleFactor: 1.3,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 32,
+                            ),
+                            CircularProgressIndicator(),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              );
+                );
+              } else {
+                return DefaultTabController(
+                  length: value.length,
+                  child: Scaffold(
+                    appBar: AppBar(
+                      title: Text(widget.title),
+                      leading: const RefreshMenusButton(),
+                      actions: const [BrightnessToggle()],
+                      bottom: TabBar(
+                        tabs: buildImageTabs(value),
+                      ),
+                    ),
+                    body: LayoutBuilder(
+                      builder: (context, constraints) => TabBarView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: buildImageViews(value),
+                      ),
+                    ),
+                  ),
+                );
+              }
             },
           ),
         );
