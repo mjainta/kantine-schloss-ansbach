@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,10 @@ import 'dart:io';
 
 class MenuProvider {
   static MenuProvider get shared => MenuProvider();
-  List<Menu> get menus => _menus;
+  SplayTreeMap<String, Menu> get menus => _menus;
   String accessToken = FacebookApi.shared.accessToken;
 
-  Future<List<Menu>> refresh() async {
+  Future<SplayTreeMap<String, Menu>> refresh() async {
     final response = await http.get(Uri.parse(
         'https://graph.facebook.com/v14.0/100190636138269?fields=photos%7Bimages%2Cname%7D&access_token=${accessToken}'));
 
@@ -63,8 +64,8 @@ class MenuProvider {
     return file.path;
   }
 
-  Future<List<Menu>> loadMenus() async {
-    List<Menu> menus = [];
+  Future<SplayTreeMap<String, Menu>> loadMenus() async {
+    SplayTreeMap<String, Menu> menus = SplayTreeMap<String, Menu>();
     String dir = (await getApplicationDocumentsDirectory()).path;
     Directory directory = Directory('$dir/menus');
     List<FileSystemEntity> syncList = directory.listSync();
@@ -85,15 +86,15 @@ class MenuProvider {
       );
       print('Adding menu');
       print(menu);
-      menus.add(menu);
+      menus['${year}_$week'] = menu;
     }
     return menus;
   }
 }
 
-List<Menu> _menus = <Menu>[];
+SplayTreeMap<String, Menu> _menus = SplayTreeMap<String, Menu>();
 
 class MenusChange extends Notification {
   MenusChange({required this.menus});
-  final List<Menu> menus;
+  final SplayTreeMap<String, Menu> menus;
 }

@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import '../../../shared/classes/classes.dart';
 import '../../../shared/providers/menus.dart';
@@ -12,7 +14,7 @@ class RefreshMenusButton extends StatelessWidget {
       icon: const Icon(Icons.refresh),
       onPressed: () async {
         print('Refresh icon pressed');
-        List<Menu> menus = await MenuProvider.shared.refresh();
+        SplayTreeMap<String, Menu> menus = await MenuProvider.shared.refresh();
         MenusChange(menus: menus).dispatch(context);
       },
     );

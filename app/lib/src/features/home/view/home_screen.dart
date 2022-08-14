@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
@@ -27,11 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
             menus.value = notification.menus;
             return true;
           },
-          child: ValueListenableBuilder<List<Menu>>(
+          child: ValueListenableBuilder<SplayTreeMap<String, Menu>>(
             valueListenable: menus,
             builder: (context, value, child) {
               if (value.isEmpty) {
-                Future<List<Menu>> future = MenuProvider.shared.refresh();
+                Future<SplayTreeMap<String, Menu>> future =
+                    MenuProvider.shared.refresh();
                 future.then(
                     (menus) => MenusChange(menus: menus).dispatch(context));
                 // Display message when no menu is there, yet
@@ -99,10 +101,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<Tab> buildImageTabs(List<Menu> menus) {
+  List<Tab> buildImageTabs(SplayTreeMap<String, Menu> menus) {
     List<Tab> tabs = [];
 
-    for (var menu in menus) {
+    for (var menu in menus.values) {
       String text = 'KW ${menu.calendarWeek}';
       tabs.add(
         Tab(text: text),
@@ -112,10 +114,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return tabs;
   }
 
-  List<Widget> buildImageViews(menus) {
+  List<Widget> buildImageViews(SplayTreeMap<String, Menu> menus) {
     List<Widget> views = [];
 
-    for (var menu in menus) {
+    for (var menu in menus.values) {
       views.add(
         OrientationBuilder(
           builder: (context, orientation) {
