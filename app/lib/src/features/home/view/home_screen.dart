@@ -110,8 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
             var basePosition = orientation == Orientation.portrait
                 ? Alignment.center
                 : Alignment.topCenter;
+            final theme = ThemeProvider.of(context).theme(context);
             return PhotoView(
-              backgroundDecoration: BoxDecoration(color: Colors.white),
+              backgroundDecoration: BoxDecoration(color: theme.dividerColor),
               imageProvider: FileImage(File(menu.imageAssetPath)),
               basePosition: basePosition,
               initialScale: initialScale,
