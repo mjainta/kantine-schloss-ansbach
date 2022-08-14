@@ -120,8 +120,6 @@ class MenuProvider {
   }
 }
 
-List<MenuImage> images = ImagesProvider.shared.images;
-
 List<Menu> _menus = <Menu>[
   // Menu(
   //   id: '111',
