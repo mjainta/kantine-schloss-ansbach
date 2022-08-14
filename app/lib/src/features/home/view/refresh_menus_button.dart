@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../shared/classes/classes.dart';
-
 import '../../../shared/providers/menus.dart';
 
 class RefreshMenusButton extends StatelessWidget {

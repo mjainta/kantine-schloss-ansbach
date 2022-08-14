@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import '../../../shared/classes/classes.dart';
@@ -9,15 +8,6 @@ import 'view.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -26,18 +16,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final menus = ValueNotifier(MenuProvider.shared.menus);
-  // Menu? _menu;
 
   @override
   Widget build(BuildContext context) {
-    // _menu ??= menus[0];
-
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return LayoutBuilder(
       builder: (context, constraints) {
         return NotificationListener<MenusChange>(
@@ -53,8 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 length: value.length,
                 child: Scaffold(
                   appBar: AppBar(
-                    // Here we take the value from the HomeScreen object that was created by
-                    // the App.build method, and use it to set our appbar title.
                     title: Text(widget.title),
                     leading: const RefreshMenusButton(),
                     actions: const [BrightnessToggle()],
@@ -95,13 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     for (var menu in menus) {
       views.add(
-        // InteractiveViewer(
-        //   maxScale: 6,
-        //   child: Image.asset(
-        //     menu.image.sourceLink,
-        //     fit: BoxFit.fitWidth,
-        //   ),
-        // ),
         OrientationBuilder(
           builder: (context, orientation) {
             var initialScale = orientation == Orientation.portrait

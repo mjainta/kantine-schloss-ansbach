@@ -43,7 +43,6 @@ class _AppState extends State<App> {
           child: ValueListenableBuilder<ThemeSettings>(
             valueListenable: settings,
             builder: (context, value, _) {
-              // Create theme instance
               final theme = ThemeProvider.of(context);
               print('Building DynamicColorBuilder');
               print(theme.lightDynamic?.primary.toString());
