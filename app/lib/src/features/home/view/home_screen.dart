@@ -106,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     for (var menu in menus.values) {
       String text = 'KW ${menu.calendarWeek}';
+      // String text = menu.weekSpanString();
       tabs.add(
         Tab(text: text),
       );
@@ -128,9 +129,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? Alignment.center
                 : Alignment.topCenter;
             final theme = ThemeProvider.of(context).theme(context);
+            final image = menu.imageAssetPath != null
+                ? FileImage(File(menu.imageAssetPath ?? ''))
+                : Image.asset(
+                    'assets/hungry_cat.png',
+                  ).image;
+            if (menu.imageAssetPath == null) {
+              return Container(
+                decoration: BoxDecoration(color: theme.dividerColor),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image(
+                      image: Image.asset('assets/hungry_cat.png').image,
+                      fit: BoxFit.scaleDown,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                    ),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    const Text(
+                      'Kein Speiseplan für diese Woche vorhanden.',
+                      textScaleFactor: 1.3,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
+            }
+
             return PhotoView(
               backgroundDecoration: BoxDecoration(color: theme.dividerColor),
-              imageProvider: FileImage(File(menu.imageAssetPath)),
+              imageProvider: image,
               basePosition: basePosition,
               initialScale: initialScale,
               minScale: PhotoViewComputedScale.contained,

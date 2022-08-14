@@ -6,10 +6,12 @@ import 'providers.dart';
 import '../classes/classes.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
+import 'package:week_of_year/week_of_year.dart';
 
 class MenuProvider {
   static MenuProvider get shared => MenuProvider();
   SplayTreeMap<String, Menu> get menus => _menus;
+  SplayTreeMap<String, Menu> get showMenus => _showMenus;
   String accessToken = FacebookApi.shared.accessToken;
 
   Future<SplayTreeMap<String, Menu>> refresh() async {
@@ -47,7 +49,8 @@ class MenuProvider {
       throw Exception('Failed to load album');
     }
     _menus = await loadMenus();
-    return _menus;
+    _showMenus = identifyShowMenus();
+    return _showMenus;
   }
 
   Future downloadPhoto(String link, int year, int week, String id) async {
@@ -90,9 +93,50 @@ class MenuProvider {
     }
     return menus;
   }
+
+  SplayTreeMap<String, Menu> identifyShowMenus() {
+    SplayTreeMap<String, Menu> showMenus = SplayTreeMap<String, Menu>();
+    final today = DateTime.now();
+    final nextWeek = DateTime.now().add(const Duration(days: 21));
+    final String todayIdentifier = '${today.year}_${today.weekOfYear}';
+    bool foundTodaysMenu = false;
+    bool foundNextWeeksMenu = false;
+    final String nextWeekIdentifier = '${nextWeek.year}_${nextWeek.weekOfYear}';
+
+    _menus.forEach(
+      (identifier, menu) {
+        if (identifier == todayIdentifier) {
+          showMenus[identifier] = menu;
+          foundTodaysMenu = true;
+        } else if (identifier == nextWeekIdentifier) {
+          showMenus[identifier] = menu;
+          foundNextWeeksMenu = true;
+        }
+      },
+    );
+
+    if (!foundTodaysMenu) {
+      showMenus[todayIdentifier] = Menu(
+        id: todayIdentifier,
+        year: today.year,
+        calendarWeek: today.weekOfYear,
+      );
+    }
+
+    if (!foundNextWeeksMenu) {
+      showMenus[nextWeekIdentifier] = Menu(
+        id: nextWeekIdentifier,
+        year: nextWeek.year,
+        calendarWeek: nextWeek.weekOfYear,
+      );
+    }
+
+    return showMenus;
+  }
 }
 
 SplayTreeMap<String, Menu> _menus = SplayTreeMap<String, Menu>();
+SplayTreeMap<String, Menu> _showMenus = SplayTreeMap<String, Menu>();
 
 class MenusChange extends Notification {
   MenusChange({required this.menus});
