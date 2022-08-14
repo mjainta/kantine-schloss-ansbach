@@ -40,6 +40,8 @@ dependencies:
   google_fonts: ^3.0.1
   dynamic_color: ^1.4.0
   material_color_utilities: ^0.1.4
+  http: ^0.13.5
+  path_provider: ^2.0.11
 
 dev_dependencies:
   flutter_test:

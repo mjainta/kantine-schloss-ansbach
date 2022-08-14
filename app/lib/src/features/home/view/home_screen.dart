@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import '../../../shared/classes/classes.dart';
@@ -23,12 +25,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _menus = MenuProvider().menus;
-  Menu? _menu;
+  final menus = ValueNotifier(MenuProvider.shared.menus);
+  // Menu? _menu;
 
   @override
   Widget build(BuildContext context) {
-    _menu ??= _menus[0];
+    // _menu ??= menus[0];
 
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
@@ -38,24 +40,37 @@ class _HomeScreenState extends State<HomeScreen> {
     // than having to individually change instances of widgets.
     return LayoutBuilder(
       builder: (context, constraints) {
-        return DefaultTabController(
-          length: _menus.length,
-          child: Scaffold(
-            appBar: AppBar(
-              // Here we take the value from the HomeScreen object that was created by
-              // the App.build method, and use it to set our appbar title.
-              title: Text(widget.title),
-              actions: const [BrightnessToggle()],
-              bottom: TabBar(
-                tabs: buildImageTabs(_menus),
-              ),
-            ),
-            body: LayoutBuilder(
-              builder: (context, constraints) => TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: buildImageViews(_menus),
-              ),
-            ),
+        return NotificationListener<MenusChange>(
+          onNotification: (notification) {
+            print('IM DONE WITH UPDATING MENUS');
+            menus.value = notification.menus;
+            return true;
+          },
+          child: ValueListenableBuilder<List<Menu>>(
+            valueListenable: menus,
+            builder: (context, value, child) {
+              return DefaultTabController(
+                length: value.length,
+                child: Scaffold(
+                  appBar: AppBar(
+                    // Here we take the value from the HomeScreen object that was created by
+                    // the App.build method, and use it to set our appbar title.
+                    title: Text(widget.title),
+                    leading: const RefreshMenusButton(),
+                    actions: const [BrightnessToggle()],
+                    bottom: TabBar(
+                      tabs: buildImageTabs(value),
+                    ),
+                  ),
+                  body: LayoutBuilder(
+                    builder: (context, constraints) => TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: buildImageViews(value),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         );
       },
@@ -97,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 : Alignment.topCenter;
             return PhotoView(
               backgroundDecoration: BoxDecoration(color: Colors.white),
-              imageProvider: AssetImage(menu.image.sourceLink),
+              imageProvider: FileImage(File(menu.imageAssetPath)),
               basePosition: basePosition,
               initialScale: initialScale,
               minScale: PhotoViewComputedScale.contained,
