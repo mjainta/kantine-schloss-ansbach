@@ -17,7 +17,7 @@ class _AppState extends State<App> {
       GoRoute(
         path: '/',
         builder: (context, state) =>
-            const HomeScreen(title: 'Kantine Ansbach Speisepläne'),
+            const HomeScreen(title: 'Schlosskantine Speisepläne'),
       ),
     ],
   );

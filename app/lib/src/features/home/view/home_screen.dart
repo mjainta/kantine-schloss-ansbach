@@ -56,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Scaffold(
                   appBar: AppBar(
                     title: Text(widget.title),
-                    leading: const RefreshMenusButton(),
                     actions: const [BrightnessToggle()],
                   ),
                   body: LayoutBuilder(
@@ -87,7 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Scaffold(
                     appBar: AppBar(
                       title: Text(widget.title),
-                      leading: const RefreshMenusButton(),
                       actions: const [BrightnessToggle()],
                       bottom: TabBar(
                         tabs: buildImageTabs(value),
