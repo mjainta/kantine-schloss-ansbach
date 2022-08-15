@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 class NoAnimationPageTransitionsBuilder extends PageTransitionsBuilder {
@@ -227,6 +228,7 @@ class ThemeProvider extends InheritedWidget {
       drawerTheme: drawerTheme(colorScheme),
       scaffoldBackgroundColor: colorScheme.background,
       useMaterial3: true,
+      textTheme: GoogleFonts.montserratTextTheme(),
     );
   }
 
@@ -246,6 +248,7 @@ class ThemeProvider extends InheritedWidget {
       drawerTheme: drawerTheme(colorScheme),
       scaffoldBackgroundColor: colorScheme.background,
       useMaterial3: true,
+      textTheme: GoogleFonts.montserratTextTheme(),
     );
   }
 

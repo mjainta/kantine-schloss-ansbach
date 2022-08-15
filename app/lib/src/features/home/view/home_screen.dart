@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_view/photo_view.dart';
 import '../../../shared/classes/classes.dart';
 import '../../../shared/providers/providers.dart';
@@ -88,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text(widget.title),
                       actions: const [BrightnessToggle()],
                       bottom: TabBar(
+                        labelStyle: GoogleFonts.montserrat(),
                         tabs: buildImageTabs(value),
                       ),
                     ),
