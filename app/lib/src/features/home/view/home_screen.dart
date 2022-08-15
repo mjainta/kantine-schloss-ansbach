@@ -33,9 +33,25 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context, value, child) {
               if (value.isEmpty) {
                 Future<SplayTreeMap<String, Menu>> future =
-                    MenuProvider.shared.refresh();
-                future.then(
-                    (menus) => MenusChange(menus: menus).dispatch(context));
+                    MenuProvider.shared.initialLoad();
+                future.then((menus) {
+                  bool needRefresh = false;
+
+                  for (var menu in menus.values) {
+                    if (menu.imageAssetPath == null) {
+                      needRefresh = true;
+                    }
+                  }
+
+                  if (needRefresh) {
+                    Future<SplayTreeMap<String, Menu>> future =
+                        MenuProvider.shared.refresh();
+                    future.then(
+                        (menus) => MenusChange(menus: menus).dispatch(context));
+                  } else {
+                    MenusChange(menus: menus).dispatch(context);
+                  }
+                });
                 // Display message when no menu is there, yet
                 return Scaffold(
                   appBar: AppBar(
@@ -50,14 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Text(
-                              'Keine Speisepläne vorhanden.',
-                              textScaleFactor: 1.3,
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
                             Text(
                               'Prüfe nach neuen Speiseplänen...',
                               textScaleFactor: 1.3,

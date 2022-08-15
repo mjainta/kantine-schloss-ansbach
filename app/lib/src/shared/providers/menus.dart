@@ -31,25 +31,21 @@ class MenuProvider {
         final nameSplitted = name.split(' ');
         final int year = int.parse(nameSplitted[1]);
         final int week = int.parse(nameSplitted[2].substring(2));
+        final String identifier = '${year}_$week';
 
-        String imagePath = await downloadPhoto(link, year, week, id);
-
-        Menu menu = Menu(
-          calendarWeek: week,
-          year: year,
-          imageAssetPath: imagePath,
-          id: id,
-        );
-        // Menu menu = Menu.fromJson(photos[0]);
-        print(menu);
+        if (!_menus.containsKey(identifier)) {
+          await downloadPhoto(link, year, week, id);
+        }
       }
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load album');
     }
+
     _menus = await loadMenus();
     _showMenus = identifyShowMenus();
+
     return _showMenus;
   }
 
@@ -65,6 +61,12 @@ class MenuProvider {
     await file.writeAsBytes(bytes);
     print('Photo downloaded into: ${file.path}');
     return file.path;
+  }
+
+  Future<SplayTreeMap<String, Menu>> initialLoad() async {
+    _menus = await loadMenus();
+    _showMenus = identifyShowMenus();
+    return _showMenus;
   }
 
   Future<SplayTreeMap<String, Menu>> loadMenus() async {
@@ -97,7 +99,7 @@ class MenuProvider {
   SplayTreeMap<String, Menu> identifyShowMenus() {
     SplayTreeMap<String, Menu> showMenus = SplayTreeMap<String, Menu>();
     final today = DateTime.now();
-    final nextWeek = DateTime.now().add(const Duration(days: 21));
+    final nextWeek = DateTime.now().add(const Duration(days: 7));
     final String todayIdentifier = '${today.year}_${today.weekOfYear}';
     bool foundTodaysMenu = false;
     bool foundNextWeeksMenu = false;
