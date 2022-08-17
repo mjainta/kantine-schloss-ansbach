@@ -13,9 +13,14 @@ class MenuProvider {
   SplayTreeMap<String, Menu> get menus => _menus;
   SplayTreeMap<String, Menu> get showMenus => _showMenus;
   String accessToken = FacebookApi.shared.accessToken;
+  http.Client httpClient = http.Client();
+
+  void setClient(http.Client client) {
+    httpClient = client;
+  }
 
   Future<SplayTreeMap<String, Menu>> refresh() async {
-    final response = await http.get(Uri.parse(
+    final response = await httpClient.get(Uri.parse(
         'https://graph.facebook.com/v14.0/100190636138269?fields=photos%7Bimages%2Cname%7D&access_token=${accessToken}'));
 
     if (response.statusCode == 200) {
@@ -51,15 +56,19 @@ class MenuProvider {
 
   Future downloadPhoto(String link, int year, int week, String id) async {
     String url = '$link&access_token=$accessToken';
-    http.Client client = http.Client();
-    var req = await client.get(Uri.parse(url));
-    var bytes = req.bodyBytes;
-    String dir = (await getApplicationDocumentsDirectory()).path;
+    var req = await httpClient.get(Uri.parse(url));
 
-    File file = File('$dir/menus/${year}_${week}_$id.jpg');
-    await file.create(recursive: true);
-    await file.writeAsBytes(bytes);
-    return file.path;
+    if (req.statusCode == 200) {
+      var bytes = req.bodyBytes;
+      String dir = (await getApplicationDocumentsDirectory()).path;
+
+      File file = File('$dir/menus/${year}_${week}_$id.jpg');
+      await file.create(recursive: true);
+      await file.writeAsBytes(bytes);
+      return file.path;
+    } else {
+      throw Exception('Failed to load photo');
+    }
   }
 
   Future<SplayTreeMap<String, Menu>> initialLoad() async {
