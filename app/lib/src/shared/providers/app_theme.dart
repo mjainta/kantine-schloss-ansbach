@@ -228,7 +228,11 @@ class ThemeProvider extends InheritedWidget {
       drawerTheme: drawerTheme(colorScheme),
       scaffoldBackgroundColor: colorScheme.background,
       useMaterial3: true,
-      textTheme: GoogleFonts.montserratTextTheme(),
+      textTheme: GoogleFonts.montserratTextTheme(
+        ThemeData(
+          brightness: Brightness.light,
+        ).textTheme,
+      ),
     );
   }
 
@@ -248,7 +252,11 @@ class ThemeProvider extends InheritedWidget {
       drawerTheme: drawerTheme(colorScheme),
       scaffoldBackgroundColor: colorScheme.background,
       useMaterial3: true,
-      textTheme: GoogleFonts.montserratTextTheme(),
+      textTheme: GoogleFonts.montserratTextTheme(
+        ThemeData(
+          brightness: Brightness.dark,
+        ).textTheme,
+      ),
     );
   }
 
