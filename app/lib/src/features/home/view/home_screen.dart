@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_view/photo_view.dart';
 import '../../../shared/classes/classes.dart';
@@ -17,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final menus = ValueNotifier(MenuProvider.shared.menus);
+  final menus = ValueNotifier(MenuProvider.shared.showMenus);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Display message when no menu is there, yet
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text(widget.title),
+                    title: GestureDetector(
+                      child: Text(widget.title),
+                      onTap: () {
+                        return GoRouter.of(context).go('/settings');
+                      },
+                    ),
                     actions: const [BrightnessToggle()],
                   ),
                   body: LayoutBuilder(
@@ -85,7 +91,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   length: value.length,
                   child: Scaffold(
                     appBar: AppBar(
-                      title: Text(widget.title),
+                      title: GestureDetector(
+                        child: Text(widget.title),
+                        onTap: () {
+                          return GoRouter.of(context).go('/settings');
+                        },
+                      ),
                       actions: const [BrightnessToggle()],
                       bottom: TabBar(
                         labelStyle: GoogleFonts.montserrat(),
@@ -155,10 +166,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       height: 32,
                     ),
-                    const Text(
-                      'Kein Speiseplan für diese Woche vorhanden.',
-                      textScaleFactor: 1.3,
-                      textAlign: TextAlign.center,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 0),
+                      child: const Text(
+                        'Kein Speiseplan für diese Woche vorhanden.',
+                        textScaleFactor: 1.3,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ],
                 ),

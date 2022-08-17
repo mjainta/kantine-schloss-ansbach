@@ -1,6 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:schlosskantine/src/features/settings/settings.dart';
 import '../features/home/home.dart';
 import 'providers/app_theme.dart';
 
@@ -18,6 +19,10 @@ class _AppState extends State<App> {
         path: '/',
         builder: (context, state) =>
             const HomeScreen(title: 'Schlosskantine Speisepläne'),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const Settings(),
       ),
     ],
   );
