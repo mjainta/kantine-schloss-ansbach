@@ -25,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, constraints) {
         return NotificationListener<MenusChange>(
           onNotification: (notification) {
-            print('IM DONE WITH UPDATING MENUS');
             menus.value = notification.menus;
             return true;
           },

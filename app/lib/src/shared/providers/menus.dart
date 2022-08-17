@@ -59,7 +59,6 @@ class MenuProvider {
     File file = File('$dir/menus/${year}_${week}_$id.jpg');
     await file.create(recursive: true);
     await file.writeAsBytes(bytes);
-    print('Photo downloaded into: ${file.path}');
     return file.path;
   }
 
@@ -89,8 +88,6 @@ class MenuProvider {
         imageAssetPath: imagePath,
         id: id,
       );
-      print('Adding menu');
-      print(menu);
       menus['${year}_$week'] = menu;
     }
     return menus;
