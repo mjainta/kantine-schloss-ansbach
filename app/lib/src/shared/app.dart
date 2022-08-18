@@ -27,7 +27,7 @@ class _AppState extends State<App> {
     ],
   );
   final settings = ValueNotifier(ThemeSettings(
-    sourceColor: Color.fromARGB(72, 236, 11, 11),
+    sourceColor: Colors.cyan,
     themeMode: ThemeMode.system,
   ));
 
@@ -35,35 +35,34 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
-      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) =>
-          ThemeProvider(
-        lightDynamic: lightDynamic,
-        darkDynamic: darkDynamic,
-        settings: settings,
-        child: NotificationListener<ThemeSettingChange>(
-          onNotification: (notification) {
-            settings.value = notification.settings;
-            return true;
-          },
-          child: ValueListenableBuilder<ThemeSettings>(
-            valueListenable: settings,
-            builder: (context, value, _) {
-              final theme = ThemeProvider.of(context);
-              print('Building DynamicColorBuilder');
-              print(theme.lightDynamic?.primary.toString());
-              return MaterialApp.router(
-                routeInformationProvider: _router.routeInformationProvider,
-                routeInformationParser: _router.routeInformationParser,
-                routerDelegate: _router.routerDelegate,
-                title: 'Kantine Ansbach Speisepläne App',
-                theme: theme.light(settings.value.sourceColor),
-                darkTheme: theme.dark(settings.value.sourceColor),
-                themeMode: theme.themeMode(),
-              );
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        return ThemeProvider(
+          lightDynamic: lightDynamic,
+          darkDynamic: darkDynamic,
+          settings: settings,
+          child: NotificationListener<ThemeSettingChange>(
+            onNotification: (notification) {
+              settings.value = notification.settings;
+              return true;
             },
+            child: ValueListenableBuilder<ThemeSettings>(
+              valueListenable: settings,
+              builder: (context, value, _) {
+                final theme = ThemeProvider.of(context);
+                return MaterialApp.router(
+                  routeInformationProvider: _router.routeInformationProvider,
+                  routeInformationParser: _router.routeInformationParser,
+                  routerDelegate: _router.routerDelegate,
+                  title: 'Kantine Ansbach Speisepläne App',
+                  theme: theme.light(settings.value.sourceColor),
+                  darkTheme: theme.dark(settings.value.sourceColor),
+                  themeMode: theme.themeMode(),
+                );
+              },
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
