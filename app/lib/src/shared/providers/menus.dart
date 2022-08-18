@@ -81,24 +81,28 @@ class MenuProvider {
     SplayTreeMap<String, Menu> menus = SplayTreeMap<String, Menu>();
     String dir = (await getApplicationDocumentsDirectory()).path;
     Directory directory = Directory('$dir/menus');
-    List<FileSystemEntity> syncList = directory.listSync();
-    for (var element in syncList) {
-      final filename = element.path.split('/').last;
-      final filenameSplitted = filename.split('_');
-      final int year = int.parse(filenameSplitted[0]);
-      final int week = int.parse(filenameSplitted[1]);
-      final String id = filenameSplitted[2];
 
-      String imagePath = element.path;
+    if (directory.existsSync()) {
+      List<FileSystemEntity> syncList = directory.listSync();
+      for (var element in syncList) {
+        final filename = element.path.split('/').last;
+        final filenameSplitted = filename.split('_');
+        final int year = int.parse(filenameSplitted[0]);
+        final int week = int.parse(filenameSplitted[1]);
+        final String id = filenameSplitted[2];
 
-      Menu menu = Menu(
-        calendarWeek: week,
-        year: year,
-        imageAssetPath: imagePath,
-        id: id,
-      );
-      menus['${year}_$week'] = menu;
+        String imagePath = element.path;
+
+        Menu menu = Menu(
+          calendarWeek: week,
+          year: year,
+          imageAssetPath: imagePath,
+          id: id,
+        );
+        menus['${year}_$week'] = menu;
+      }
     }
+
     return menus;
   }
 
