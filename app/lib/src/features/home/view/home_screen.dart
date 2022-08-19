@@ -126,7 +126,10 @@ class _HomeScreenState extends State<HomeScreen> {
       String text = 'KW ${menu.calendarWeek}';
       // String text = menu.weekSpanString();
       tabs.add(
-        Tab(text: text),
+        Tab(
+          text: text,
+          key: Key('cw_${menu.calendarWeek}_tab'),
+        ),
       );
     }
 
