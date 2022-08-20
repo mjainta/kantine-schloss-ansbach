@@ -59,8 +59,9 @@ class MenuProvider {
       throw Exception('Failed to load album');
     }
 
-    _menus = await loadMenus();
-    _showMenus = identifyShowMenus();
+    _menus = await loadMenus(
+        fromPath: '${(await getApplicationDocumentsDirectory()).path}/menus');
+    _showMenus = identifyShowMenus(fromMenus: _menus);
 
     return _showMenus;
   }
@@ -83,18 +84,20 @@ class MenuProvider {
   }
 
   Future<SplayTreeMap<String, Menu>> initialLoad() async {
-    _menus = await loadMenus();
-    _showMenus = identifyShowMenus();
+    _menus = await loadMenus(
+        fromPath: '${(await getApplicationDocumentsDirectory()).path}/menus');
+    _showMenus = identifyShowMenus(fromMenus: _menus);
     return _showMenus;
   }
 
-  Future<SplayTreeMap<String, Menu>> loadMenus() async {
+  Future<SplayTreeMap<String, Menu>> loadMenus(
+      {required String fromPath}) async {
     SplayTreeMap<String, Menu> menus = SplayTreeMap<String, Menu>();
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    Directory directory = fileSystem.directory('$dir/menus');
+    Directory directory = fileSystem.directory(fromPath);
 
     if (directory.existsSync()) {
       List<FileSystemEntity> syncList = directory.listSync();
+
       for (var element in syncList) {
         final filename = element.path.split('/').last;
         final filenameSplitted = filename.split('_');
@@ -117,7 +120,8 @@ class MenuProvider {
     return menus;
   }
 
-  SplayTreeMap<String, Menu> identifyShowMenus() {
+  SplayTreeMap<String, Menu> identifyShowMenus(
+      {required SplayTreeMap<String, Menu> fromMenus}) {
     SplayTreeMap<String, Menu> showMenus = SplayTreeMap<String, Menu>();
     final today = DateTime.now();
     final nextWeek = DateTime.now().add(const Duration(days: 7));
@@ -126,7 +130,7 @@ class MenuProvider {
     bool foundNextWeeksMenu = false;
     final String nextWeekIdentifier = '${nextWeek.year}_${nextWeek.weekOfYear}';
 
-    _menus.forEach(
+    fromMenus.forEach(
       (identifier, menu) {
         if (identifier == todayIdentifier) {
           showMenus[identifier] = menu;
