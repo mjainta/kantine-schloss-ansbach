@@ -115,6 +115,9 @@ class MenuProvider {
         );
         menus['${year}_$week'] = menu;
       }
+    } else {
+      directory.createSync(recursive: true);
+      loadMenus(fromPath: fromPath);
     }
 
     return menus;

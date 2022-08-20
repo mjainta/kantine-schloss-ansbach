@@ -100,6 +100,16 @@ void main() {
 
       expect(menus.length, 0);
     });
+
+    test('no menus/ directory exists yet', () async {
+      FileSystem fileSystem = MemoryFileSystem();
+      var menuProviderUnderTest = MenuProvider(fileSystem: fileSystem);
+      String testPath = '/menus';
+      await menuProviderUnderTest.loadMenus(fromPath: testPath);
+
+      Directory newDirectory = fileSystem.directory(testPath);
+      expect(newDirectory.existsSync(), true);
+    });
   });
 
   group('identifyShowMenus', () {
