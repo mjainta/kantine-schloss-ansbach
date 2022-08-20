@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:schlosskantine/src/shared/app.dart';
+import 'package:schlosskantine_menu_app/src/shared/app.dart';
 import 'package:week_of_year/week_of_year.dart';
 
 void main() {

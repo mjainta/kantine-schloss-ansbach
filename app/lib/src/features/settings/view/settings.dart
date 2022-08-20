@@ -2,8 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:schlosskantine/src/features/home/home.dart';
-import 'package:schlosskantine/src/shared/providers/app_theme.dart';
+import 'package:schlosskantine_menu_app/src/features/home/home.dart';
+import 'package:schlosskantine_menu_app/src/shared/providers/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../shared/classes/classes.dart';
 import '../../../shared/providers/menus.dart';
