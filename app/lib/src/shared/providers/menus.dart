@@ -1,19 +1,30 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'package:file/file.dart';
+import 'package:file/local.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'providers.dart';
 import '../classes/classes.dart';
 import 'package:http/http.dart' as http;
-import 'dart:io';
 import 'package:week_of_year/week_of_year.dart';
 
 class MenuProvider {
-  static MenuProvider get shared => MenuProvider();
+  static final MenuProvider _singleton = MenuProvider._internal();
+  late FileSystem fileSystem;
+
   SplayTreeMap<String, Menu> get menus => _menus;
   SplayTreeMap<String, Menu> get showMenus => _showMenus;
+
   String accessToken = FacebookApi.shared.accessToken;
   http.Client httpClient = http.Client();
+
+  MenuProvider._internal();
+
+  factory MenuProvider({FileSystem fileSystem = const LocalFileSystem()}) {
+    _singleton.fileSystem = fileSystem;
+    return _singleton;
+  }
 
   void setClient(http.Client client) {
     httpClient = client;
@@ -62,7 +73,7 @@ class MenuProvider {
       var bytes = req.bodyBytes;
       String dir = (await getApplicationDocumentsDirectory()).path;
 
-      File file = File('$dir/menus/${year}_${week}_$id.jpg');
+      File file = fileSystem.file('$dir/menus/${year}_${week}_$id.jpg');
       await file.create(recursive: true);
       await file.writeAsBytes(bytes);
       return file.path;
@@ -80,7 +91,7 @@ class MenuProvider {
   Future<SplayTreeMap<String, Menu>> loadMenus() async {
     SplayTreeMap<String, Menu> menus = SplayTreeMap<String, Menu>();
     String dir = (await getApplicationDocumentsDirectory()).path;
-    Directory directory = Directory('$dir/menus');
+    Directory directory = fileSystem.directory('$dir/menus');
 
     if (directory.existsSync()) {
       List<FileSystemEntity> syncList = directory.listSync();

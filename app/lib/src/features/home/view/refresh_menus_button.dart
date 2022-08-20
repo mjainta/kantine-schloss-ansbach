@@ -9,12 +9,10 @@ class RefreshMenusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return IconButton(
       icon: const Icon(Icons.refresh),
       onPressed: () async {
-        print('Refresh icon pressed');
-        SplayTreeMap<String, Menu> menus = await MenuProvider.shared.refresh();
+        SplayTreeMap<String, Menu> menus = await MenuProvider().refresh();
         MenusChange(menus: menus).dispatch(context);
       },
     );

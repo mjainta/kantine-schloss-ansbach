@@ -10,7 +10,6 @@ import 'view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
-
   final String title;
 
   @override
@@ -18,7 +17,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final menus = ValueNotifier(MenuProvider.shared.showMenus);
+  final menuProvider = MenuProvider();
+  final menus = ValueNotifier(MenuProvider().showMenus);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context, value, child) {
               if (value.isEmpty) {
                 Future<SplayTreeMap<String, Menu>> future =
-                    MenuProvider.shared.initialLoad();
+                    menuProvider.initialLoad();
                 future.then((menus) {
                   bool needRefresh = false;
 
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   if (needRefresh) {
                     Future<SplayTreeMap<String, Menu>> future =
-                        MenuProvider.shared.refresh();
+                        menuProvider.refresh();
                     future.then(
                         (menus) => MenusChange(menus: menus).dispatch(context));
                   } else {
