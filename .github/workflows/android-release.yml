@@ -13,7 +13,6 @@ env:
   JAVA_VERSION: '12'
   FLUTTER_VERSION: '3.0.5'
   FLUTTER_CHANNEL: 'stable'
-  FB_API_ACCESS_TOKEN: ${{ secrets.FB_API_ACCESS_TOKEN }}
 
 jobs:
   flutter_test:
@@ -32,8 +31,8 @@ jobs:
       - run: cd app/
       - run: flutter pub get
       - run: flutter test --dart-define=FB_API_ACCESS_TOKEN=123abc
-      - run: flutter build apk --split-per-abi --dart-define=FB_API_ACCESS_TOKEN=${{FB_API_ACCESS_TOKEN}}
-      - run: flutter build appbundle --dart-define=FB_API_ACCESS_TOKEN=${{FB_API_ACCESS_TOKEN}}
+      - run: flutter build apk --split-per-abi --dart-define=FB_API_ACCESS_TOKEN=${{ secrets.FB_API_ACCESS_TOKEN }}
+      - run: flutter build appbundle --dart-define=FB_API_ACCESS_TOKEN=${{ secrets.FB_API_ACCESS_TOKEN }}
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
