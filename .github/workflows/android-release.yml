@@ -52,4 +52,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: appbundle
-          path: build/app/outputs/bundle/release
+          path: ${{ github.workspace }}/app/build/app/outputs/bundle/release
