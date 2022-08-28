@@ -14,6 +14,7 @@ env:
   JAVA_VERSION: '12'
   FLUTTER_VERSION: '3.0.5'
   FLUTTER_CHANNEL: 'stable'
+  PROPERTIES_PATH: "./android/key.properties"
 
 jobs:
   flutter:
@@ -32,10 +33,21 @@ jobs:
         with:
           channel: ${{ env.FLUTTER_CHANNEL }}
           flutter-version: ${{ env.FLUTTER_VERSION }}
+      # Getting dependencies
       - run: flutter pub get
+      # Unit tests
       - run: flutter test --dart-define=FB_API_ACCESS_TOKEN=123abc
+      # Prepare building: Creating the key.properties file
+      - run: |
+          echo keyPassword=\${{ secrets.KEY_STORE }} > ${{ env.PROPERTIES_PATH }}
+          echo storePassword=\${{ secrets.KEY_PASSWORD }} >> ${{ env.PROPERTIES_PATH }}
+          echo keyAlias=\${{ secrets.KEY_ALIAS }} >> ${{ env.PROPERTIES_PATH }}
+      # Prepare building: Decoding base64 key into a file
+      - run: echo "${{ secrets.KEYSTORE2 }}" | base64 --decode > android/app/key.jks
+      # Building release packages
       - run: flutter build apk --split-per-abi --dart-define=FB_API_ACCESS_TOKEN=${{ secrets.FB_API_ACCESS_TOKEN }}
       - run: flutter build appbundle --dart-define=FB_API_ACCESS_TOKEN=${{ secrets.FB_API_ACCESS_TOKEN }}
+      # Save release packages
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
