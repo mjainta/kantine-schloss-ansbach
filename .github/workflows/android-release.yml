@@ -41,9 +41,9 @@ jobs:
           echo keyPassword=\${{ secrets.KEY_STORE }} > ${{ env.PROPERTIES_PATH }}
           echo storePassword=\${{ secrets.KEY_PASSWORD }} >> ${{ env.PROPERTIES_PATH }}
           echo keyAlias=\${{ secrets.KEY_ALIAS }} >> ${{ env.PROPERTIES_PATH }}
-          echo storeFile=\${{ github.workspace }}/android/key.properties >> ${{ env.PROPERTIES_PATH }}
+          echo storeFile=\${{ github.workspace }}/app/android/key.jks >> ${{ env.PROPERTIES_PATH }}
       # Prepare building: Decoding base64 key into a file
-      - run: echo "${{ secrets.KEYSTORE2 }}" | base64 --decode > android/app/key.jks
+      - run: echo "${{ secrets.KEYSTORE2 }}" | base64 --decode > android/key.jks
       # Building release packages
       - run: flutter build apk --split-per-abi --dart-define=FB_API_ACCESS_TOKEN=${{ secrets.FB_API_ACCESS_TOKEN }}
       - run: flutter build appbundle --dart-define=FB_API_ACCESS_TOKEN=${{ secrets.FB_API_ACCESS_TOKEN }}
