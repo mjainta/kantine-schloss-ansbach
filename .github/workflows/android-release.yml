@@ -1,8 +1,9 @@
 name: Schlosskantine Ansbach App Android Release
 
 on:
-  branches:
-    - main
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
