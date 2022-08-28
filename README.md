@@ -1,6 +1,6 @@
 # kantine-schloss-ansbach
 
-![Build Status - master](https://github.com/mjainta/kantine-schloss-ansbach/actions/workflows/android-release.yml/badge.svg?branch=master)
+![Build Status - main](https://github.com/mjainta/kantine-schloss-ansbach/actions/workflows/android-release.yml/badge.svg?branch=main)
 
 ## Run tests
 
