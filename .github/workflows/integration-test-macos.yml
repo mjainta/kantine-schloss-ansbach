@@ -43,4 +43,5 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           profile: Nexus 6
-          script: flutter test integration_test/green_path_test.dart -d "macos"
+          working-directory: ./app
+          script: flutter test integration_test/green_path_test.dart -d "emulator"
