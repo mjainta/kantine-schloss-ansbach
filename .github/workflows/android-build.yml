@@ -1,4 +1,4 @@
-name: Schlosskantine Ansbach App Android Release
+name: Schlosskantine Ansbach App Android Build
 
 on:
   push:
@@ -34,8 +34,6 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
       # Getting dependencies
       - run: flutter pub get
-      # Unit tests
-      - run: flutter test --dart-define=FB_API_ACCESS_TOKEN=123abc
       # Prepare building: Creating the key.properties file
       - run: |
           echo keyPassword=\${{ secrets.KEY_STORE }} > ${{ env.PROPERTIES_PATH }}
@@ -44,10 +42,10 @@ jobs:
           echo storeFile=\${{ github.workspace }}/app/android/key.jks >> ${{ env.PROPERTIES_PATH }}
       # Prepare building: Decoding base64 key into a file
       - run: echo "${{ secrets.KEYSTORE2 }}" | base64 --decode > android/key.jks
-      # Building release packages
+      # Building packages
       - run: flutter build apk --split-per-abi --dart-define=FB_API_ACCESS_TOKEN=${{ secrets.FB_API_ACCESS_TOKEN }}
       - run: flutter build appbundle --dart-define=FB_API_ACCESS_TOKEN=${{ secrets.FB_API_ACCESS_TOKEN }}
-      # Save release packages
+      # Save packages
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
