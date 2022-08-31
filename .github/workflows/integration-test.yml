@@ -21,9 +21,6 @@ jobs:
       matrix:
         api-level: [29]
         target: [playstore]
-    defaults:
-      run:
-        working-directory: app
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
@@ -44,4 +41,4 @@ jobs:
           arch: x86_64
           profile: Nexus 6
           working-directory: ./app
-          script: flutter test integration_test/green_path_test.dart -d "emulator"
+          script: flutter test integration_test/green_path_test.dart -d "emulator-5554"
